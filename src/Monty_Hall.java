@@ -7,46 +7,29 @@
  *
  * @author cyc3086
  */
-import java.util.*;
 public class Monty_Hall {
-    private static int prize;
-    private static int guess;
-    private static int view;
-    public static Scanner in;
-    public static void main(String[]args) {
-        in = new Scanner(System.in);
-        
-        double probability1,probablility2;
-        double switchNum=0,stayNum=0;
-        
-        System.out.print("How many times: ");
-        
-        int times = in.nextInt();
-        System.out.println("Prize\tGuess\tView\tNew Guess\t");
-        for(int i=0; i<times;i++) {
-        	String output  = "";
-            prize = (int)Math.floor(Math.random() * 3 + 1);
-            guess = (int)Math.floor(Math.random() * 3 + 1);
-            view  = 1;
-            while(view==prize||view==guess) {
-                view++;
-            }
-            if(guess==prize) {
-                stayNum++;
-            }
-            int new_guess =(int)Math.floor(Math.random() * 3 + 1);
-            while(new_guess==view||new_guess==guess) {
-                new_guess =(int)Math.floor(Math.random() * 3 + 1);
-            }
-            if(new_guess==prize) {
-                switchNum++;
-            }
-            System.out.printf("%s\t%s\t%s\t%s\n",prize,guess,view,new_guess);
-        }
-        System.out.println("Chance to win if switch: " + (switchNum/times));
-        System.out.println("Chance to win if stayed: " + (stayNum/times));
-       
+    private static int prize = 0;
+    private static int guess = 0;
+    private static int view = 0;
+    private static int newguess;
+    private static int[] wins = {0,0};
 
+    public static void main(String[]args) {
+        int times = 1000000;
+        for (int i =0 ; i < times; i ++ ) {
+            prize = (int) (Math.random() * 3 + 1);
+            guess = (int) (Math.random() * 3 + 1);
+            while (view == guess || view == prize || view == 0)
+                view = (int) (Math.random() * 3 + 1);
+            //System.out.printf("p:%s\tg:%s\tv:%s\n", prize, guess, view);
+            newguess = 0;
+            while (newguess == guess || newguess == view || newguess == 0)
+                newguess = (int) (Math.random() * 3 + 1);
+            //System.out.printf("p:%s\tg:%s\tv:%s\tng:\t%s\n",prize, guess, view, newguess);
+            wins[0] += (guess == prize) ? 1 : 0;
+            wins[1] += (newguess == prize)?1: 0;
+        }
+        System.out.printf("Wins if you stayed:\t%s\nWins if you changed:\t%s",(double)wins[0]/(double)times,(double)wins[1]/(double)times);
     }
     
 }
